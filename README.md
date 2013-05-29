@@ -1,4 +1,4 @@
-# Annotate Fonts
+# annotate-fonts
 
 A Photoshop script that automatically annotates your PSDs with font information.
 
@@ -20,3 +20,12 @@ All annotations are kept in a seperate top-level Font Annotations layer group an
 
 Example created with [Flat UI Kit](http://designmodo.com/flat/) by @designmodo.
 
+## Contributing
+
+I'd love to see some optimizations to the annotation text drawing portions, as they're currently taking the longest and get hit once per text layer. I'm open to other optimizations, fixes and improvements and would encourage opening an issue before adding new features. annotate-fonts is a small and simple script that attempts to do just one thing.
+
+- Fork it
+- Create your feature branch (git checkout -b my-new-feature)
+- Commit your changes (git commit -am 'Add some feature')
+- Push to the branch (git push origin my-new-feature)
+- Create new Pull Request
