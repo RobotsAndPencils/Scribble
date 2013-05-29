@@ -20,6 +20,14 @@ All annotations are kept in a seperate top-level Font Annotations layer group an
 
 Example created with [Flat UI Kit](http://designmodo.com/flat/) by @designmodo.
 
+## Installation
+
+- Download the .zip near the top of the page
+- Move annotate-fonts.jsx into /Applications/Adobe Photoshop CS6/Presets/Scripts/
+- Restart Photoshop
+
+The next time you need to annotate a PSD, go to File > Scripts > Annotate Fonts to run it.
+
 ## Contributing
 
 I'd love to see some optimizations to the annotation text drawing portions, as they're currently taking the longest and get hit once per text layer. I'm open to other optimizations, fixes and improvements and would encourage opening an issue before adding new features. annotate-fonts is a small and simple script that attempts to do just one thing.
