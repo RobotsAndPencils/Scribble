@@ -125,24 +125,135 @@ function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backg
     var padding = 7 * scale,
         fontSize = getFontSizeRelativeToDocument(),
         radius = fontSize;
+    var indexString = index.toString();
 
     var shapeLayerRef = layerSetRef.artLayers.add();
     drawCircle(x2 + padding, y1 + ((y2 - y1) / 2 - radius), radius, backgroundColor);
 
-    var textLayerRef = layerSetRef.artLayers.add();
-    textLayerRef.kind = LayerKind.TEXT;
-    var textItemRef = textLayerRef.textItem;
-    textItemRef.kind = TextType.PARAGRAPHTEXT;
-    textItemRef.position = Array(x2 + padding, y1 + ((y2 - y1) / 2 - radius));
-    textItemRef.width = radius * 2;
-    textItemRef.height = radius * 2;
-    textItemRef.justification = Justification.CENTER;
-    textItemRef.baselineShift = -(radius - fontSize / 2);
-    textItemRef.contents = index;
-    textItemRef.name = textItemRef.contents;
-    textItemRef.color = foregroundColor;
-    textItemRef.font = "LucidaGrande-Bold";
-    textItemRef.size = new UnitValue(fontSize, "pt");
+    // Create the text layer
+    // Need to create the layer and add it to the layerSetRef's artLayers
+    var textLayerDescriptor = new ActionDescriptor();
+
+    var textLayerReference = new ActionReference();
+    textLayerReference.putClass(stringIDToTypeID("textLayer"));
+    textLayerDescriptor.putReference(charIDToTypeID("null"), textLayerReference);
+    
+    // Text content
+    var textDescription = new ActionDescriptor();
+    textDescription.putString(charIDToTypeID( "Txt " ), indexString);
+    textDescription.putString(charIDToTypeID( "Nm  " ), indexString);
+
+    // Text shape
+    var shapeList = new ActionList();
+    var shapeDescriptor = new ActionDescriptor();
+    var idTEXT = charIDToTypeID( "TEXT" );
+    var idTEXT = charIDToTypeID( "TEXT" );
+    var idPnt = charIDToTypeID( "Pnt " );
+    shapeDescriptor.putEnumerated( idTEXT, idTEXT, idPnt );
+    var idOrnt = charIDToTypeID( "Ornt" );
+    var idOrnt = charIDToTypeID( "Ornt" );
+    var idHrzn = charIDToTypeID( "Hrzn" );
+    shapeDescriptor.putEnumerated( idOrnt, idOrnt, idHrzn );
+    var idrowCount = stringIDToTypeID( "rowCount" );
+    shapeDescriptor.putInteger( idrowCount, 1 );
+    var idcolumnCount = stringIDToTypeID( "columnCount" );
+    shapeDescriptor.putInteger( idcolumnCount, 1 );
+    var idrowMajorOrder = stringIDToTypeID( "rowMajorOrder" );
+    shapeDescriptor.putBoolean( idrowMajorOrder, true );
+    var idrowGutter = stringIDToTypeID( "rowGutter" );
+    var idPnt = charIDToTypeID( "#Pnt" );
+    shapeDescriptor.putUnitDouble( idrowGutter, idPnt, 0.000000 );
+    var idcolumnGutter = stringIDToTypeID( "columnGutter" );
+    var idPnt = charIDToTypeID( "#Pnt" );
+    shapeDescriptor.putUnitDouble( idcolumnGutter, idPnt, 0.000000 );
+    var idSpcn = charIDToTypeID( "Spcn" );
+    var idPnt = charIDToTypeID( "#Pnt" );
+    shapeDescriptor.putUnitDouble( idSpcn, idPnt, 0.000000 );
+    var idframeBaselineAlignment = stringIDToTypeID( "frameBaselineAlignment" );
+    var idframeBaselineAlignment = stringIDToTypeID( "frameBaselineAlignment" );
+    var idalignByAscent = stringIDToTypeID( "alignByAscent" );
+    shapeDescriptor.putEnumerated( idframeBaselineAlignment, idframeBaselineAlignment, idalignByAscent );
+    var idfirstBaselineMinimum = stringIDToTypeID( "firstBaselineMinimum" );
+    var idPnt = charIDToTypeID( "#Pnt" );
+    shapeDescriptor.putUnitDouble( idfirstBaselineMinimum, idPnt, 0.000000 );
+    var idbase = stringIDToTypeID( "base" );
+    var desc13 = new ActionDescriptor();
+    var idHrzn = charIDToTypeID( "Hrzn" );
+    desc13.putDouble( idHrzn, 0.000000 );
+    var idVrtc = charIDToTypeID( "Vrtc" );
+    desc13.putDouble( idVrtc, 0.000000 );
+    var idPnt = charIDToTypeID( "Pnt " );
+    shapeDescriptor.putObject( idbase, idPnt, desc13 );
+    
+    // Position (based on its center) for a text layer is set with textClick
+    // (as if you clicked somewhere on the document with the type tool)
+    // It must be set using a percentage of the document size
+    var documentWidth = app.activeDocument.width.as("px");
+    var documentHeight = app.activeDocument.height.as("px");
+    var positionDescriptor = new ActionDescriptor();
+    positionDescriptor.putUnitDouble( charIDToTypeID("Hrzn"), charIDToTypeID("#Prc"), (x2 + padding + radius) / documentWidth * 100.0 );
+    positionDescriptor.putUnitDouble( charIDToTypeID("Vrtc"), charIDToTypeID("#Prc"), (y1 + ((y2 - y1) / 2 - radius) + radius) / documentHeight * 100.0 );
+    textDescription.putObject(charIDToTypeID("TxtC"), charIDToTypeID("TxtC"), positionDescriptor);
+
+    
+    shapeList.putObject( stringIDToTypeID( "textShape" ), shapeDescriptor );
+    textDescription.putList( stringIDToTypeID( "textShape" ), shapeList );
+    
+    // Text Style
+    var styleList = new ActionList();
+    var styleDescriptor = new ActionDescriptor();
+    styleDescriptor.putBoolean(stringIDToTypeID( "styleSheetHasParent" ), true );
+    styleDescriptor.putString(stringIDToTypeID( "fontPostScriptName" ), "LucidaGrande" );
+    styleDescriptor.putString(charIDToTypeID( "FntN" ), "Lucida Grande" );
+    styleDescriptor.putString(charIDToTypeID( "FntS" ), "Bold" );
+    styleDescriptor.putInteger(charIDToTypeID( "Scrp" ), 0 );
+    styleDescriptor.putInteger(charIDToTypeID( "FntT" ), 1 );
+    styleDescriptor.putUnitDouble(charIDToTypeID( "Sz  " ), charIDToTypeID( "#Pnt" ), fontSize );
+    styleDescriptor.putUnitDouble(charIDToTypeID( "Bsln" ), charIDToTypeID( "#Pnt" ), - 1 / 3 * fontSize );
+    
+    var colorDescriptor = new ActionDescriptor();
+    var idRd = charIDToTypeID( "Rd  " );
+    colorDescriptor.putDouble( idRd, foregroundColor.rgb.red );
+    var idGrn = charIDToTypeID( "Grn " );
+    colorDescriptor.putDouble( idGrn, foregroundColor.rgb.green );
+    var idBl = charIDToTypeID( "Bl  " );
+    colorDescriptor.putDouble( idBl, foregroundColor.rgb.blue );
+    var idRGBC = charIDToTypeID( "RGBC" );
+    styleDescriptor.putObject(charIDToTypeID( "Clr " ), idRGBC, colorDescriptor );
+        
+    var rangeDescriptor = new ActionDescriptor();
+    rangeDescriptor.putInteger(charIDToTypeID( "From" ), 0 );
+    rangeDescriptor.putInteger(charIDToTypeID( "T   " ), 5 );
+    var idTxtS = charIDToTypeID( "TxtS" );
+    rangeDescriptor.putObject( idTxtS, idTxtS, styleDescriptor );
+    styleList.putObject(charIDToTypeID( "Txtt" ), rangeDescriptor );
+    textDescription.putList(charIDToTypeID( "Txtt" ), styleList);
+    
+    // Paragraph style
+    var idparagraphStyleRange = stringIDToTypeID( "paragraphStyleRange" );
+    var list3 = new ActionList();
+    var desc17 = new ActionDescriptor();
+    var idFrom = charIDToTypeID( "From" );
+    desc17.putInteger( idFrom, 0 );
+    var idT = charIDToTypeID( "T   " );
+    desc17.putInteger( idT, indexString.length );
+    var idparagraphStyle = stringIDToTypeID( "paragraphStyle" );
+    var desc18 = new ActionDescriptor();
+    var idstyleSheetHasParent = stringIDToTypeID( "styleSheetHasParent" );
+    desc18.putBoolean( idstyleSheetHasParent, true );
+    var idAlgn = charIDToTypeID( "Algn" );
+    var idAlg = charIDToTypeID( "Alg " );
+    var idCntr = charIDToTypeID( "Cntr" );
+    desc18.putEnumerated( idAlgn, idAlg, idCntr );
+    var idparagraphStyle = stringIDToTypeID( "paragraphStyle" );
+    desc17.putObject( idparagraphStyle, idparagraphStyle, desc18 );
+    var idparagraphStyleRange = stringIDToTypeID( "paragraphStyleRange" );
+    list3.putObject( idparagraphStyleRange, desc17 );
+    textDescription.putList( idparagraphStyleRange, list3 );
+    
+    // Create the text layer   
+    textLayerDescriptor.putObject(charIDToTypeID( "Usng" ), charIDToTypeID( "TxLr" ), textDescription);
+    executeAction( charIDToTypeID( "Mk  " ), textLayerDescriptor, DialogModes.NO );
 }
 
 function drawFontLegend(mainLayerSet, fontArray, scale, backgroundColor, foregroundColor) {
@@ -151,7 +262,7 @@ function drawFontLegend(mainLayerSet, fontArray, scale, backgroundColor, foregro
     textLayerRef.kind = LayerKind.TEXT;
 
     var textItemRef = textLayerRef.textItem;
-    var fontSize = getFontSizeRelativeToDocument();;
+    var fontSize = getFontSizeRelativeToDocument();
     var padding = fontSize;
     textItemRef.position = [padding, padding];
     textItemRef.name = "Font Legend";
