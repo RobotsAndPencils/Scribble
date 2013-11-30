@@ -87,7 +87,6 @@ function annotateFonts(documentReference, scale) {
     // Iterate through all layers and collect font and layer references
     var fontArray = new Array; // List of font names
     var layerFontMap = {}; // Map from layer index to font name
-    var layer, fontName;
     for (var index = 0; index < allLayerIndexes.length; ++index) {
         layerIndex = allLayerIndexes[index];
         if (validTextLayer(layerIndex)) {
@@ -117,7 +116,6 @@ function annotateDirectory(scale) {
 
 // Draw a font index annotation beside a font item layer
 function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backgroundColor, foregroundColor) {
-    var layerSetRef = mainLayerSet.layerSets.add();
     var bounds = getLayerBoundsByIndex(sourceLayerIndex);
     var y1 = bounds[1];
     var x2 = bounds[2];
@@ -127,7 +125,6 @@ function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backg
         radius = fontSize;
     var indexString = index.toString();
 
-    var shapeLayerRef = layerSetRef.artLayers.add();
     drawCircle(x2 + padding, y1 + ((y2 - y1) / 2 - radius), radius, backgroundColor);
 
     // Create the text layer
@@ -147,10 +144,8 @@ function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backg
     var shapeList = new ActionList();
     var shapeDescriptor = new ActionDescriptor();
     var idTEXT = charIDToTypeID( "TEXT" );
-    var idTEXT = charIDToTypeID( "TEXT" );
     var idPnt = charIDToTypeID( "Pnt " );
     shapeDescriptor.putEnumerated( idTEXT, idTEXT, idPnt );
-    var idOrnt = charIDToTypeID( "Ornt" );
     var idOrnt = charIDToTypeID( "Ornt" );
     var idHrzn = charIDToTypeID( "Hrzn" );
     shapeDescriptor.putEnumerated( idOrnt, idOrnt, idHrzn );
@@ -169,7 +164,6 @@ function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backg
     var idSpcn = charIDToTypeID( "Spcn" );
     var idPnt = charIDToTypeID( "#Pnt" );
     shapeDescriptor.putUnitDouble( idSpcn, idPnt, 0.000000 );
-    var idframeBaselineAlignment = stringIDToTypeID( "frameBaselineAlignment" );
     var idframeBaselineAlignment = stringIDToTypeID( "frameBaselineAlignment" );
     var idalignByAscent = stringIDToTypeID( "alignByAscent" );
     shapeDescriptor.putEnumerated( idframeBaselineAlignment, idframeBaselineAlignment, idalignByAscent );
@@ -230,14 +224,12 @@ function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backg
     textDescription.putList(charIDToTypeID( "Txtt" ), styleList);
     
     // Paragraph style
-    var idparagraphStyleRange = stringIDToTypeID( "paragraphStyleRange" );
     var list3 = new ActionList();
     var desc17 = new ActionDescriptor();
     var idFrom = charIDToTypeID( "From" );
     desc17.putInteger( idFrom, 0 );
     var idT = charIDToTypeID( "T   " );
     desc17.putInteger( idT, indexString.length );
-    var idparagraphStyle = stringIDToTypeID( "paragraphStyle" );
     var desc18 = new ActionDescriptor();
     var idstyleSheetHasParent = stringIDToTypeID( "styleSheetHasParent" );
     desc18.putBoolean( idstyleSheetHasParent, true );
@@ -257,7 +249,7 @@ function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backg
 }
 
 function drawFontLegend(mainLayerSet, fontArray, scale, backgroundColor, foregroundColor) {
-    var layerSetRef = mainLayerSet.layerSets.add()
+    var layerSetRef = mainLayerSet.layerSets.add();
     var textLayerRef = layerSetRef.artLayers.add();
     textLayerRef.kind = LayerKind.TEXT;
 
@@ -416,7 +408,7 @@ function drawRect(bounds, color) {
 // -----------------------------------------------------------------------------
 
 function getLayerKindByIndex(index) {
-    var ref, desc, adjustmentDesc, layerSectionType;
+    var ref, desc;
    ref = new ActionReference();
    ref.putIndex(charIDToTypeID( "Lyr " ), index );
    desc =  executeActionGet(ref);
@@ -490,7 +482,7 @@ function getLayerOpacityByIndex(layerIndex) {
 function getAllLayersByIndex() {
     function getNumberLayers() {
         var ref = new ActionReference();
-        ref.putProperty(charIDToTypeID("Prpr"), charIDToTypeID("NmbL"))
+        ref.putProperty(charIDToTypeID("Prpr"), charIDToTypeID("NmbL"));
         ref.putEnumerated(charIDToTypeID("Dcmn"), charIDToTypeID("Ordn"), charIDToTypeID("Trgt"));
         return executeActionGet(ref).getInteger(charIDToTypeID("NmbL"));
     }
@@ -498,10 +490,10 @@ function getAllLayersByIndex() {
     function hasBackground() {
         var ref = new ActionReference();
         ref.putProperty(charIDToTypeID("Prpr"), charIDToTypeID("Bckg"));
-        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Back")) //bottom Layer/background
+        ref.putEnumerated(charIDToTypeID("Lyr "), charIDToTypeID("Ordn"), charIDToTypeID("Back")); //bottom Layer/background
         var desc = executeActionGet(ref);
         var res = desc.getBoolean(charIDToTypeID("Bckg"));
-        return res
+        return res;
     };
 
     function getLayerType(idx, prop) {
@@ -510,17 +502,18 @@ function getAllLayersByIndex() {
         var desc = executeActionGet(ref);
         var type = desc.getEnumerationValue(prop);
         var res = typeIDToStringID(type);
-        return res
+        return res;
     };
 
     var cnt = getNumberLayers() + 1;
     var res = new Array();
+    var i;
     if (hasBackground()) {
-        var i = 0;
+        i = 0;
     } else {
-        var i = 1;
+        i = 1;
     };
-    var prop = stringIDToTypeID("layerSection")
+    var prop = stringIDToTypeID("layerSection");
     for (i; i < cnt; i++) {
         var temp = getLayerType(i, prop);
         if (temp != "layerSectionEnds") res.push(i);
@@ -531,7 +524,7 @@ function getAllLayersByIndex() {
 function makeActiveByIndex(idx, visible) {
     var desc = new ActionDescriptor();
     var ref = new ActionReference();
-    ref.putIndex(charIDToTypeID("Lyr "), idx)
+    ref.putIndex(charIDToTypeID("Lyr "), idx);
     desc.putReference(charIDToTypeID("null"), ref);
     desc.putBoolean(charIDToTypeID("MkVs"), visible);
     executeAction(charIDToTypeID("slct"), desc, DialogModes.NO);
@@ -562,7 +555,7 @@ function init() {
         var unique = [];
         for (var i = 0; i < this.length; i += 1) {
             if (unique.indexOf(this[i]) == -1) {
-                unique.push(this[i])
+                unique.push(this[i]);
             }
         }
         return unique;
@@ -597,7 +590,7 @@ function init() {
             }
         }
         return -1;
-    }
+    };
 
     Stdlib = function Stdlib() {};
 
@@ -621,11 +614,11 @@ function init() {
         if (Folder.prototype._getFiles) {
             getF = function (f, m) {
                 return f._getFiles(m);
-            }
+            };
         } else {
             getF = function (f, m) {
                 return f.getFiles(m);
-            }
+            };
         }
 
         if (mask instanceof RegExp) {
@@ -655,7 +648,7 @@ function init() {
         return Stdlib.getFiles(folder, function (file) {
             return file instanceof Folder;
         });
-    }
+    };
 
     Folder.prototype.findFiles = function (mask) {
         return Stdlib.findFiles(this, mask);
