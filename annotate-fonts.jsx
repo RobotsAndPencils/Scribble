@@ -23,36 +23,36 @@ function showDialog() {
         preferredSize:[350, 50], \
         text: 'Annotate Fonts',  \
         margins:15, \
-        \
-        bottomGroup: Group{ \
-            retinaCheckbox: Checkbox { text: 'Retina', value: true }, \
-            cancelButton: Button { text: 'Cancel', properties:{name:'cancel'}, size: [120,24], alignment:['right', 'center'] }, \
-            currentButton: Button { text: 'Current Document', properties:{name:'current'}, size: [150,24], alignment:['right', 'center'] }, \
-            directoryButton: Button { text: 'Directory', properties:{name:'directory'}, size: [120,24], alignment:['right', 'center'] }, \
-        }\
-    }";
+    }";            
 
     var window = new Window(windowResource);
+    window.add("image", undefined, File(File($.fileName).parent + "/logo.png"));
+    var bottomGroup = window.add("group { \
+        retinaCheckbox: Checkbox { text: 'Retina', value: true }, \
+        cancelButton: Button { text: 'Cancel', properties:{name:'cancel'}, size: [120,24], alignment:['right', 'center'] }, \
+        currentButton: Button { text: 'Current Document', properties:{name:'current'}, size: [150,24], alignment:['right', 'center'] }, \
+        directoryButton: Button { text: 'Directory', properties:{name:'directory'}, size: [120,24], alignment:['right', 'center'] } \
+    }");
 
-    window.bottomGroup.cancelButton.onClick = function() {
+    bottomGroup.cancelButton.onClick = function() {
         window.close();
         return true;
     };
-    window.bottomGroup.currentButton.onClick = function() {
+    bottomGroup.currentButton.onClick = function() {
         window.close();
         if (validateState()) {
             app.activeDocument.suspendHistory("Annotate Fonts", "annotateFonts(app.activeDocument, scale());");
         }
         return true;
     };
-    window.bottomGroup.directoryButton.onClick = function() {
+    bottomGroup.directoryButton.onClick = function() {
         window.close();
         annotateDirectory(scale());
         return true;
     };
 
     function scale() {
-        if (window.bottomGroup.retinaCheckbox.value) {
+        if (bottomGroup.retinaCheckbox.value) {
             return 2;
         } else {
             return 1;
