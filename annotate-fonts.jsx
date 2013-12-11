@@ -73,6 +73,13 @@ function annotateFonts(documentReference, scale) {
     white.rgb.red = 255;
     white.rgb.green = 255;
     white.rgb.blue = 255;
+    
+    var annotationFont;
+    try {
+        annotationFont = this.app.fonts.getByName("HelveticaNeue");
+    } catch (error) {
+        annotationFont = this.app.fonts.getByName("ArialMT");
+    }
 
     // Ensure the Font Annotations layer group exists
     try {
@@ -97,11 +104,11 @@ function annotateFonts(documentReference, scale) {
             fontArray = fontArray.unique();
             var fontIndex = fontArray.indexOf(fontString);
             layerFontMap[layerIndex] = fontIndex;
-            drawIndexAnnotation(mainLayerSet, layerIndex, fontIndex + 1, scale, orange, white);
+            drawIndexAnnotation(mainLayerSet, layerIndex, fontIndex + 1, scale, red, white, annotationFont);
         }
     };
 
-    drawFontLegend(mainLayerSet, fontArray, scale, orange, white);
+    drawFontLegend(mainLayerSet, fontArray, scale, red, white, annotationFont);
 }
 
 function annotateDirectory(scale) {
@@ -116,7 +123,7 @@ function annotateDirectory(scale) {
 }
 
 // Draw a font index annotation beside a font item layer
-function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backgroundColor, foregroundColor) {
+function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backgroundColor, foregroundColor, font) {
     var bounds = getLayerBoundsByIndex(sourceLayerIndex);
     var y1 = bounds[1];
     var x2 = bounds[2];
@@ -198,8 +205,8 @@ function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backg
     var styleList = new ActionList();
     var styleDescriptor = new ActionDescriptor();
     styleDescriptor.putBoolean(stringIDToTypeID( "styleSheetHasParent" ), true );
-    styleDescriptor.putString(stringIDToTypeID( "fontPostScriptName" ), "LucidaGrande" );
-    styleDescriptor.putString(charIDToTypeID( "FntN" ), "Lucida Grande" );
+    styleDescriptor.putString(stringIDToTypeID( "fontPostScriptName" ), font.postScriptName );
+    styleDescriptor.putString(charIDToTypeID( "FntN" ), font.postScriptName );
     styleDescriptor.putString(charIDToTypeID( "FntS" ), "Bold" );
     styleDescriptor.putInteger(charIDToTypeID( "Scrp" ), 0 );
     styleDescriptor.putInteger(charIDToTypeID( "FntT" ), 1 );
@@ -249,7 +256,7 @@ function drawIndexAnnotation(mainLayerSet, sourceLayerIndex, index, scale, backg
     executeAction( charIDToTypeID( "Mk  " ), textLayerDescriptor, DialogModes.NO );
 }
 
-function drawFontLegend(mainLayerSet, fontArray, scale, backgroundColor, foregroundColor) {
+function drawFontLegend(mainLayerSet, fontArray, scale, backgroundColor, foregroundColor, font) {
     var layerSetRef = mainLayerSet.layerSets.add();
     var textLayerRef = layerSetRef.artLayers.add();
     textLayerRef.kind = LayerKind.TEXT;
@@ -260,7 +267,7 @@ function drawFontLegend(mainLayerSet, fontArray, scale, backgroundColor, foregro
     textItemRef.position = [padding, padding];
     textItemRef.name = "Font Legend";
     textItemRef.color = foregroundColor;
-    textItemRef.font = "LucidaGrande-Bold";
+    textItemRef.font = font.postScriptName;
     textItemRef.size = new UnitValue(fontSize, "pt");
 
     var legendString = "";
