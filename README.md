@@ -9,7 +9,6 @@ A Photoshop script that automatically annotates your PSDs with font information.
 
 All annotations are kept in a seperate top-level Font Annotations layer group and no other changes are made to the existing document.
 
-
 ## Before
 
 ![](before.png)
@@ -19,6 +18,10 @@ All annotations are kept in a seperate top-level Font Annotations layer group an
 ![](after.png)
 
 Example created with [Flat UI Kit](http://designmodo.com/flat/) by @designmodo.
+
+## Compatibility
+
+Annotate Fonts has been developed for and tested with Adobe Photochop CS6
 
 ## Installation
 
