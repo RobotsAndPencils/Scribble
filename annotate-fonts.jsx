@@ -64,10 +64,11 @@ function showDialog() {
 
 function annotateFonts(documentReference, scale) {
     // Colors used for annotation
-    var orange = new SolidColor();
-    orange.rgb.red = 255;
-    orange.rgb.green = 127;
-    orange.rgb.blue = 0;
+    var red = new SolidColor();
+    red.cmyk.cyan = 4;
+    red.cmyk.magenta = 100;
+    red.cmyk.yellow = 100;
+    red.cmyk.black = 0;
     var white = new SolidColor();
     white.rgb.red = 255;
     white.rgb.green = 255;
