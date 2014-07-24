@@ -1,13 +1,6 @@
-# annotate-fonts
+# Scribble
 
 A Photoshop script that automatically annotates your PSDs with font information.
-
-- Lists font names, sizes (in pts) and hex color codes
-- Ignores invisible or zero-opacity layers
-- Supports @2x designs
-- Run on the current document or an entire directory
-
-All annotations are kept in a seperate top-level Font Annotations layer group and no other changes are made to the existing document.
 
 ## Before
 
@@ -18,6 +11,15 @@ All annotations are kept in a seperate top-level Font Annotations layer group an
 ![](after.png)
 
 Example created with [Flat UI Kit](http://designmodo.com/flat/) by @designmodo.
+
+## Features
+
+- Lists font names, sizes (in pts) and hex color codes
+- Ignores invisible or zero-opacity layers
+- Supports @2x designs
+- Run on the current document or an entire directory
+
+All annotations are kept in a seperate top-level Font Annotations layer group and no other changes are made to the existing document.
 
 ## Compatibility
 
@@ -31,12 +33,10 @@ Annotate Fonts has been developed for and tested with Adobe Photochop CS6
 
 The next time you need to annotate a PSD, go to File > Scripts > Annotate Fonts to run it.
 
-## Contributing
+### Maintainers
 
-I'm open to optimizations, fixes and improvements and would encourage opening an issue before adding new features. annotate-fonts is a small and simple script that attempts to do just one thing well.
+- [Brandon Evans](http://github.com/interstateone) ([@interstateone](https://twitter.com/interstateone))
 
-- Fork it
-- Create your feature branch (git checkout -b my-new-feature)
-- Commit your changes (git commit -am 'Add some feature')
-- Push to the branch (git push origin my-new-feature)
-- Create new Pull Request
+## License
+
+Scribble is available under the MIT license. See the LICENSE file for more info.
