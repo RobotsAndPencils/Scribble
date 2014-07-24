@@ -2,15 +2,7 @@
 
 A Photoshop script that automatically annotates your PSDs with font information.
 
-## Before
-
-![](before.png)
-
-## After
-
-![](after.png)
-
-Example created with [Flat UI Kit](http://designmodo.com/flat/) by @designmodo.
+![Example](example.png)
 
 ## Features
 
