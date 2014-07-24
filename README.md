@@ -33,7 +33,13 @@ Annotate Fonts has been developed for and tested with Adobe Photochop CS6
 
 The next time you need to annotate a PSD, go to File > Scripts > Annotate Fonts to run it.
 
-### Maintainers
+## Contact
+
+[![Robots & Pencils Logo](RNPLogo.png)](http://www.robotsandpencils.com)
+
+Follow Robots & Pencils on Twitter ([@robotsNpencils](https://twitter.com/robotsNpencils))
+
+## Maintainers
 
 - [Brandon Evans](http://github.com/interstateone) ([@interstateone](https://twitter.com/interstateone))
 
